@@ -1,26 +1,28 @@
 package com.sonu.springaddressbookapp.entity;
-import javax.persistence.*;
+
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "address_book")  // Custom table name
+@Table(name = "address_book")
 public class AddressEntity {
 
     @Id
     @Column(name="id")
     private Long id;
 
-    @Column(name = "full_name")  // Custom column name
+    @Column(name = "full_name")
     private String name;
 
-    @Column(name = "email_address")  // Custom column name
+    @Column(name = "email_address")
     private String emailId;
 
-    @Column(name = "address")  // Custom column name (optional, as it matches the field name)
+    @Column(name = "address")
     private String address;
 
-    @Column(name = "mobile_number")  // Custom column name
+    @Column(name = "mobile_number")
     private String mobileNumber;
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }
