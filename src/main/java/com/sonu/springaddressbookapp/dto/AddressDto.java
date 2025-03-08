@@ -15,6 +15,7 @@ public class AddressDto {
         this.mobileNumber = mobileNumber;
     }
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }

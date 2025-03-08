@@ -8,8 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/address")
 public class AddressBookController {
@@ -17,22 +15,19 @@ public class AddressBookController {
     @Autowired
     private AddressService addressService;
 
-    // Create or Update Address Entry
     @PostMapping
     public ResponseEntity<String> createOrUpdateEntry(@RequestBody AddressEntity entry) {
         addressService.createOrUpdateEntry(entry);
         return new ResponseEntity<>("Entry successfully created/updated.", HttpStatus.CREATED);
     }
 
-    // Get Address Entry by ID
     @GetMapping("/{id}")
     public ResponseEntity<AddressDto> getEntryById(@PathVariable Long id) {
-        Optional<AddressDto> addressDto = addressService.getEntryById(id);
-        return addressDto.map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
+        return addressService.getEntryById(id)
+                .map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // Delete Address Entry by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteEntry(@PathVariable Long id) {
         addressService.deleteEntry(id);
