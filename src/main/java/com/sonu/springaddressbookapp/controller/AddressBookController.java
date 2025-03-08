@@ -1,10 +1,13 @@
 package com.sonu.springaddressbookapp.controller;
+
+import com.sonu.springaddressbookapp.dto.AddressDto;
 import com.sonu.springaddressbookapp.entity.AddressEntity;
 import com.sonu.springaddressbookapp.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.Optional;
 
 @RestController
@@ -14,33 +17,25 @@ public class AddressBookController {
     @Autowired
     private AddressService addressService;
 
+    // Create or Update Address Entry
     @PostMapping
     public ResponseEntity<String> createOrUpdateEntry(@RequestBody AddressEntity entry) {
-            addressService.createOrUpdateEntry(entry);
-            return new ResponseEntity<>("Entry successfully created/updated.", HttpStatus.CREATED);
+        addressService.createOrUpdateEntry(entry);
+        return new ResponseEntity<>("Entry successfully created/updated.", HttpStatus.CREATED);
     }
 
+    // Get Address Entry by ID
     @GetMapping("/{id}")
-    public ResponseEntity<AddressEntity> getEntryById(@PathVariable Long id) {
-        try {
-            Optional<AddressEntity> addressEntity = addressService.getEntryById(id);
-            if (addressEntity.isPresent()) {
-                return new ResponseEntity<>(addressEntity.get(), HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<AddressDto> getEntryById(@PathVariable Long id) {
+        Optional<AddressDto> addressDto = addressService.getEntryById(id);
+        return addressDto.map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    // Delete Address Entry by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteEntry(@PathVariable Long id) {
-        try {
-            addressService.deleteEntry(id);
-            return new ResponseEntity<>("Entry successfully deleted.", HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error while processing the request: " + e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+        addressService.deleteEntry(id);
+        return new ResponseEntity<>("Entry successfully deleted.", HttpStatus.NO_CONTENT);
     }
 }
